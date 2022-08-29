@@ -1,0 +1,39 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  padding: 20px 0;
+}
+
+.card {
+  position: relative;
+  border: 1px solid #000;
+  display: grid;
+  justify-items: center;
+}
+
+.badge {
+  position: absolute;
+  left: 10px;
+  top: 5px;
+}
+
+.card a {
+  text-align: center;
+  width: 100%;
+  padding: 10px;
+  transition: 0.3s ease;
+}
+
+.card img {
+  max-height: 100px;
+}
+
+.card:hover a {
+  transform: scale(1.1);
+}
