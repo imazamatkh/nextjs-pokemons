@@ -1,19 +1,18 @@
-import { useState, useEffect } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
-import styles from '../styles/Home.module.css'
+ import styles from '../styles/Home.module.css'
 
-function Home() {
-	const [pokemons, setPokemons] = useState([])
+export async function getServerSideProps() {
+	const response = await fetch('https://jherr-pokemon.s3.us-west-1.amazonaws.com/index.json')
+	
+	return {
+		props: {
+			pokemons: await response.json()
+		}
+	}
+}
 
-  useEffect(() => {
-    async function getPokemons() {
-      const response = await fetch('https://jherr-pokemon.s3.us-west-1.amazonaws.com/index.json')
-      setPokemons(await response.json())
-    }
-    getPokemons()
-  }, [])
-
+function Home({pokemons}) {
   return (
 		<div className={styles.container}>
 		  <Head>
@@ -23,7 +22,7 @@ function Home() {
 		  <div className={styles.grid}>
 		    {pokemons.map(({id, image, name}) => (
 		      <div className={styles.card} key={id}>
-            <span className={styles.badge}>{id}</span>
+						<span className={styles.badge}>{id}</span>
 						<Link href={`/pokemons/${id}`}>
 							<a>
 								<img src={`https://jherr-pokemon.s3.us-west-1.amazonaws.com/${image}`} alt={name} />

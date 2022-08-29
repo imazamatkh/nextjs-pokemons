@@ -1,41 +1,27 @@
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/router'
 import Head from 'next/head'
 import Link from 'next/link'
+
 import styles from '../../styles/Pokemon.module.css'
 
-function Pokemon() {
-  // const router = useRouter()
-  // const id = router.query.id
+export async function getServerSideProps({params}) {
+	const response = await fetch(`https://jherr-pokemon.s3.us-west-1.amazonaws.com/pokemon/${params.id}.json`)
+	
+	return {
+		props: {
+			pokemon: await response.json()
+		}
+	}
+}
 
-  const {
-    query: { id }
-  } = useRouter()
-
-  const [pokemon, setPokemon] = useState(null)
-
-  useEffect(() => {
-    async function getPokemon() {
-      const response = await fetch(`https://jherr-pokemon.s3.us-west-1.amazonaws.com/pokemon/${id}.json`)
-      setPokemon(await response.json())
-    }
-    if (id) {
-      getPokemon()
-    }
-  }, [id])
-
-  if (!pokemon) {
-    return null
-  }
-
+function Pokemon({pokemon}) {
   return (
-    <div>
+		<div>
       <Head>
-        <title>{pokemon.name}</title>
-      </Head>
-
-      {/*<div>{id}</div>*/}
-      {/*<div>{JSON.stringify(pokemon)}</div>*/}
+		    <title>{pokemon.name}</title>
+		  </Head>
+      
+      {/* <div>{id}</div> */}
+      {/* <div>{JSON.stringify(pokemon)}</div> */}
 
       <div>
         <Link href={'/'}>
@@ -47,7 +33,7 @@ function Pokemon() {
         <div>
           <img className={styles.picture} src={`https://jherr-pokemon.s3.us-west-1.amazonaws.com/${pokemon.image}`} alt={pokemon.name} />
         </div>
-        <div>
+				<div>
           <div className={styles.name}>{pokemon.name}</div>
           <div className={styles.type}>{pokemon.type.join(', ')}</div>
           <table>
